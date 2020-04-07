@@ -4,14 +4,17 @@
 
 class Poligon:public DrawingObject {
 private:
-	bool empty;
+	bool empty = false;
+	unsigned int n = 3;
 public:
 	Poligon();
-	Poligon(T v, float size, int n); // v points the center of object
-									 // n - num of sides
-	Poligon(T v, float size, int n, float red, float green, float blue);
+	Poligon(const T& v, float size, unsigned int n); // v points the center of object
+													 // n - num of sides
+	Poligon(const T& v, float size, unsigned int n, float red, float green, float blue);
 	Poligon(const Poligon& P);
-	void print();
+	unsigned int getSides() const; //get num of sides
+	bool getEmpty() const; // get type of poligon
+	void print() const;
 	void setEmpty(bool empty); // makes the poligon empty inside
 };
 
@@ -21,8 +24,8 @@ private:
 	bool dotted = false;
 public:
 	line();
-	line(T v1, T v2);
-	line(T v1, T v2, float width, float red, float green, float blue);
+	line(const T& v1, const T& v2);
+	line(const T& v1, const T& v2, float width, float red, float green, float blue);
 	line(const line& L);
 	void setV1(const T& v);
 	void setV2(const T& v);
@@ -35,17 +38,20 @@ public:
 
 class circle:public DrawingObject {
 private:
-	bool dotted;
-	bool empty;
+	bool dotted = false;
+	bool empty = true;
 public:
 	circle();
-	circle(T v, float size); // size = radius; v points the center of object
-	circle(T v, float size, float red, float green, float blue);
-	circle(circle& C);
-	void print();
-	void print(float angle); // you can choose how many parts of a circle to draw
-							 // the angle is counted from the x axis
+	circle(const T& v, float R); // v points the center of object
+	circle(const T& v, float R, float red, float green, float blue);
+	circle(const circle& C);
+	void print() const;
+	void print(float angle) const; // you can choose how many parts of a circle to draw
+								   // the angle is counted from the x axis
+	void print(float angle1, float angle2) const;
+	bool getDotted() const;		 // actual for empty circle
 	void setDotted(bool dotted); // makes the circle dotted
+	bool getEmpty() const;
 	void setEmpty(bool empty); // makes the circle empty inside
 };
 

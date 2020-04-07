@@ -3,12 +3,12 @@
 
 line::line() {};
 
-line::line(T v1, T v2) {
+line::line(const T& v1, const T& v2) {
 	this->v2 = v2;
 	this->setVector(v1);
 };
 
-line::line(T v1, T v2, float width, float red, float green, float blue) {
+line::line(const T& v1, const T& v2, float width, float red, float green, float blue) {
 	this->v2 = v2;
 	this->setVector(v1);
 	this->setColor(red, green, blue);
