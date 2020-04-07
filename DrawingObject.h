@@ -12,21 +12,35 @@ private:
 	float size = 1;            
 	float width = 1;
 public:
-	void setVector(T& V) {
+	void setVector(const T& V) {
 		this->v.setX(V.getX());
 		this->v.setY(V.getY());
+	};
+	T getVector() const {
+		return this->v;
 	};
 	void setColor(float r, float g, float b) {
 		this->red = r;
 		this->green = g;
 		this->blue = b;
 	};
+	void getColor(float& r, float& g, float& b) const {
+		r = this->red;
+		g = this->green;
+		b = this->blue;
+	};
 	void setSize(float size) {
 		this->size = size;
+	};
+	float getSize() const {
+		return this->size;
 	};
 	void setWidth(float width) {
 		this->width = width;
 	};
-	virtual void print() override;
+	float getWidth() const {
+		return this->width;
+	};
+	virtual void print() const {};
 };
 #endif // !Primitiv
