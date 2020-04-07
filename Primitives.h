@@ -55,14 +55,17 @@ public:
 	void setEmpty(bool empty); // makes the circle empty inside
 };
 
-class conabis:public DrawingObject {
+class leaf:public DrawingObject {
 private:
+	bool empty = false;
 public:
-	conabis();
-	conabis(T v, float size);
-	conabis(T v, float size, float red, float green, float blue);
-	conabis(circle& C);
-	void print();
+	leaf();
+	leaf(const T& v, float size);
+	leaf(const T& v, float size, float red, float green, float blue);
+	leaf(const leaf& F);
+	void print() const;
+	bool getEmpty() const;
+	void setEmpty(bool empty);
 };
 
 class explosion {
