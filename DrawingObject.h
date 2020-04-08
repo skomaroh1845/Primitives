@@ -1,7 +1,7 @@
 #ifndef Primitiv
 #define Primitiv
 
-#include "C:\Users\Skomaroh\Desktop\LinalLegokol\Vector2D.h"
+#include "Vector2D.h"
 
 typedef Vector2D T; // you can use any vector
 
@@ -40,6 +40,18 @@ public:
 	};
 	float getWidth() const {
 		return this->width;
+	};
+	void moveUp(float x) {
+		this->v.setY(this->v.getY() + x);
+	};
+	void moveDown(float x) {
+		this->v.setY(this->v.getY() - x);
+	};
+	void moveLeft(float x) {
+		this->v.setX(this->v.getX() - x);
+	};
+    void moveRight(float x) {
+		this->v.setX(this->v.getX() + x);
 	};
 	virtual void print() const {};
 };

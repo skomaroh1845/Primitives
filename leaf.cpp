@@ -43,7 +43,7 @@ void leaf::print() const {
 		glBegin(GL_LINE_LOOP);
 		for (float a = 0; a < 2 * pi; a += 0.01)
 		{
-			float r = this->getSize() * (1 + sin(a)) * (1 + 0.9 * cos(8 * a)) * (1 + 0.1 * cos(24 * a));
+			float r = this->getSize()* 0.2 * (1 + sin(a)) * (1 + 0.9 * cos(8 * a)) * (1 + 0.1 * cos(24 * a));
 			glVertex2f(this->getVector().getX() + r * cos(a), this->getVector().getY() + r * sin(a));
 		}
 		glEnd();
@@ -53,7 +53,7 @@ void leaf::print() const {
 		glVertex2f(this->getVector().getX(), this->getVector().getY());
 		for (float a = 0; a < 2 * pi; a += 0.009)
 		{
-			float r = this->getSize() * (1 + sin(a)) * (1 + 0.9 * cos(8 * a)) * (1 + 0.1 * cos(24 * a));
+			float r = this->getSize() * 0.2 * (1 + sin(a)) * (1 + 0.9 * cos(8 * a)) * (1 + 0.1 * cos(24 * a));
 			glVertex2f(this->getVector().getX() + r * cos(a), this->getVector().getY() + r * sin(a));
 		}
 		glEnd();

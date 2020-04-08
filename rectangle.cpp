@@ -1,7 +1,12 @@
 #include "Primitives.h"
 #include <glut.h>
 
-rectangle::rectangle() {};
+rectangle::rectangle() {
+	this->v2.setX(1);
+	this->v3.setX(1);
+	this->v3.setY(1);
+	this->v4.setY(1);
+};
 
 rectangle::rectangle(const T& v1, const T& v2, const T& v3, const T& v4) {
 	this->setVector(v1);
@@ -91,4 +96,29 @@ void rectangle::print() const {
 			glVertex2f(this->v4.getX(), this->v4.getY());
 		glEnd();
 	}	
+};
+
+void rectangle::moveUp(float x) {
+	this->setV1(T(this->getV1().getX(), this->getV1().getY() + x));
+	this->setV2(T(this->getV2().getX(), this->getV2().getY() + x));
+	this->setV3(T(this->getV3().getX(), this->getV3().getY() + x));
+	this->setV4(T(this->getV4().getX(), this->getV4().getY() + x));
+};
+void rectangle::moveDown(float x) {
+	this->setV1(T(this->getV1().getX(), this->getV1().getY() - x));
+	this->setV2(T(this->getV2().getX(), this->getV2().getY() - x));
+	this->setV3(T(this->getV3().getX(), this->getV3().getY() - x));
+	this->setV4(T(this->getV4().getX(), this->getV4().getY() - x));
+};
+void rectangle::moveLeft(float x) {
+	this->setV1(T(this->getV1().getX() - x, this->getV1().getY()));
+	this->setV2(T(this->getV2().getX() - x, this->getV2().getY()));
+	this->setV3(T(this->getV3().getX() - x, this->getV3().getY()));
+	this->setV4(T(this->getV4().getX() - x, this->getV4().getY()));
+};
+void rectangle::moveRight(float x) {
+	this->setV1(T(this->getV1().getX() + x, this->getV1().getY()));
+	this->setV2(T(this->getV2().getX() + x, this->getV2().getY()));
+	this->setV3(T(this->getV3().getX() + x, this->getV3().getY()));
+	this->setV4(T(this->getV4().getX() + x, this->getV4().getY()));
 };

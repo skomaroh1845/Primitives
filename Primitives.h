@@ -19,6 +19,10 @@ public:
 	T getV2() const;
 	T getV3() const;
 	T getV4() const;
+	void moveUp(float x);
+	void moveDown(float x);
+	void moveLeft(float x);
+	void moveRight(float x);
 	bool getEmpty() const;
 	void print() const;
 	void setEmpty(bool empty); // makes the rectangle empty inside
@@ -39,6 +43,10 @@ public:
 	T getV1() const;
 	T getV2() const;
 	T getV3() const;
+	void moveUp(float x);
+	void moveDown(float x);
+	void moveLeft(float x);
+	void moveRight(float x);
 	bool getEmpty() const;
 	void print() const;
 	void setEmpty(bool empty); // makes the triangle empty inside
@@ -57,6 +65,10 @@ public:
 	void setV2(const T& v);
 	T getV1() const;
 	T getV2() const;
+	void moveUp(float x);
+	void moveDown(float x);
+	void moveLeft(float x);
+	void moveRight(float x);
 	bool getDotted() const;
 	void print() const;
 	void setDotted(bool dotted); // makes the line dotted

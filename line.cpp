@@ -1,7 +1,9 @@
 #include "Primitives.h"
 #include <glut.h>
 
-line::line() {};
+line::line() {
+	this->v2.setX(1);
+};
 
 line::line(const T& v1, const T& v2) {
 	this->v2 = v2;
@@ -63,4 +65,21 @@ void line::print() const {
 		glVertex2f(this->v2.getX(), this->v2.getY());
 	glEnd();
 	if (this->dotted) glDisable(GL_LINE_STIPPLE);
+};
+
+void line::moveUp(float x) {
+	this->setV1(T(this->getV1().getX(), this->getV1().getY() + x));
+	this->setV2(T(this->getV2().getX(), this->getV2().getY() + x));
+};
+void line::moveDown(float x) {
+	this->setV1(T(this->getV1().getX(), this->getV1().getY() - x));
+	this->setV2(T(this->getV2().getX(), this->getV2().getY() - x));
+};
+void line::moveLeft(float x) {
+	this->setV1(T(this->getV1().getX() + x, this->getV1().getY()));
+	this->setV2(T(this->getV2().getX() + x, this->getV2().getY()));
+};
+void line::moveRight(float x) {
+	this->setV1(T(this->getV1().getX() + x, this->getV1().getY()));
+	this->setV2(T(this->getV2().getX() + x, this->getV2().getY()));
 };
