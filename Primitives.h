@@ -2,20 +2,46 @@
  
 // T = Vector2D
 
-class Poligon:public DrawingObject {
+class rectangle:public DrawingObject {
 private:
 	bool empty = false;
-	unsigned int n = 3;
+	T v2, v3, v4;
 public:
-	Poligon();
-	Poligon(const T& v, float size, unsigned int n); // v points the center of object
-													 // n - num of sides
-	Poligon(const T& v, float size, unsigned int n, float red, float green, float blue);
-	Poligon(const Poligon& P);
-	unsigned int getSides() const; //get num of sides
-	bool getEmpty() const; // get type of poligon
+	rectangle();
+	rectangle(const T& v1, const T& v2, const T& v3, const T& v4);
+	rectangle(const T& v1, const T& v2, const T& v3, const T& v4, float red, float green, float blue);
+	rectangle(const rectangle& P);
+	void setV1(const T& v);
+	void setV2(const T& v);
+	void setV3(const T& v);
+	void setV4(const T& v);
+	T getV1() const;
+	T getV2() const;
+	T getV3() const;
+	T getV4() const;
+	bool getEmpty() const;
 	void print() const;
-	void setEmpty(bool empty); // makes the poligon empty inside
+	void setEmpty(bool empty); // makes the rectangle empty inside
+};
+
+class triangle:public DrawingObject {
+private:
+	bool empty = false;
+	T v2, v3;
+public:
+	triangle();
+	triangle(const T& v1, const T& v2, const T& v3);
+	triangle(const T& v1, const T& v2, const T& v3, float red, float green, float blue);
+	triangle(const triangle& P);
+	void setV1(const T& v);
+	void setV2(const T& v);
+	void setV3(const T& v);
+	T getV1() const;
+	T getV2() const;
+	T getV3() const;
+	bool getEmpty() const;
+	void print() const;
+	void setEmpty(bool empty); // makes the triangle empty inside
 };
 
 class line:public DrawingObject { // vectors point the begin and the end of line
@@ -66,14 +92,4 @@ public:
 	void print() const;
 	bool getEmpty() const;
 	void setEmpty(bool empty);
-};
-
-class explosion {
-private:
-public:
-	explosion();
-	explosion(T v);
-	explosion(T v, float size);
-	explosion(explosion& E);
-	void print();
 };
