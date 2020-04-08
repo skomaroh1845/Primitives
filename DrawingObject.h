@@ -8,7 +8,7 @@ typedef Vector2D T; // you can use any vector
 class DrawingObject {        //parent class for primitives 
 private:
 	float red = 1, green = 1, blue = 1; //colors 
-	T v;				//points the center of object
+	T v;				
 	float size = 1;            
 	float width = 1;
 public:
