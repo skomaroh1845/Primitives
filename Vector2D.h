@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-class Vector2D {
+class Vector2D final {
 public:
     double x, y;
 
@@ -15,6 +15,8 @@ public:
 
     void rotate(double angle); //Поворачивает веткор на угол angle, заданный в градусах
 
+    double length() const;
+   
     bool operator==(const Vector2D &v2) const;
 
     bool operator!=(const Vector2D &v2) const;
@@ -24,6 +26,8 @@ public:
     Vector2D operator-(const Vector2D &v2) const;
 
     Vector2D operator*(const double a) const;
+
+    Vector2D operator/(const double a) const;
 
     Vector2D& operator+=(const Vector2D &v2);
 

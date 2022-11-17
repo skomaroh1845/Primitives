@@ -1,106 +1,107 @@
 #include "Primitives.h"
-#include <glut.h>
 
-triangle::triangle() {
-	this->v2.setX(1);
-	this->v3.setX(0.5);
-	this->v3.setY(1);
-};
+triangle::triangle() : triangle(T(0,0)) {}
 
-triangle::triangle(const T& v1, const T& v2, const T& v3) {
-	this->setVector(v1);
-	this->v2 = v2;
-	this->v3 = v3;
-};
+triangle::triangle(const triangle& Tr):
+			triangle(Tr.v1, Tr.v2, Tr.v3, Tr.red, Tr.green, Tr.blue) {}
 
-triangle::triangle(const T& v1, const T& v2, const T& v3, float red, float green, float blue) {
-	this->setVector(v1);
-	this->v2 = v2;
-	this->v3 = v3;
-	this->setColor(red, green, blue);
-};
+triangle::triangle(const T& v1, const T& v2, const T& v3, float red, float green, float blue):
+			v1(v1), v2(v2), v3(v3) 
+{
+	setColor(red, green, blue);
+	setCenter( (v1 + v2 + v3) / 3 );
+	l12 = (v1 - v2).length();
+	l23 = (v2 - v3).length();
+	l31 = (v3 - v1).length();
+}
 
-triangle::triangle(const triangle& R) {
-	float r, g, b;
-	R.getColor(r, g, b);
-	this->setColor(r, g, b);
-	this->empty = R.getEmpty();
-	this->setVector(R.getVector());
-	this->setWidth(R.getWidth());
-	this->v2 = R.getV2();
-	this->v3 = R.getV3();
-};
+triangle::triangle(const T& center, double size, float red, float green, float blue) 
+{
+	setCenter(center);
+	setColor(red, green, blue);
+	T vert(0, size);
+	v1 = center + vert;
+	vert.rotate(120);
+	v2 = center + vert;
+	vert.rotate(120);
+	v3 = center + vert;
 
-bool triangle::getEmpty() const {
-	return this->empty;
-};
+	l12 = (v1 - v2).length();
+	l23 = (v2 - v3).length();
+	l31 = (v3 - v1).length();
+}
 
-void triangle::setV1(const T& v) {
-	this->setVector(v);
-};
+void triangle::changeSizeAlongAxis(double sizeX, double sizeY) 
+{
+	T vert1(v1 - getCenter());  // get a vertex coordinate relative to the center
+	T vert2(v2 - getCenter());
+	T vert3(v3 - getCenter());
 
-void triangle::setV2(const T& v) {
-	this->v2 = v;
-};
+	// calculate a change size factor
+	double cX = sizeX / this->max_minus_min(vert1.x, vert2.x, vert3.x);
+	double cY = sizeY / this->max_minus_min(vert1.y, vert2.y, vert3.y);
+	if (sizeX == 0) cX = 1;
+	if (sizeY == 0) cY = 1;
+	
+	vert1.x *= cX;  // change size of vectors 
+	vert2.x *= cX;
+	vert3.x *= cX;
 
-void triangle::setV3(const T& v) {
-	this->v3 = v;
-};
+	vert1.y *= cY;
+	vert2.y *= cY;
+	vert3.y *= cY;
 
-T triangle::getV1() const {
-	return this->getVector();
-};
+	v1 = vert1 + getCenter();  // save new vectors
+	v2 = vert2 + getCenter();
+	v3 = vert3 + getCenter();
 
-T triangle::getV2() const {
-	return this->v2;
-};
+	l12 = (v1 - v2).length();  // save new lenghts of sides 
+	l23 = (v2 - v3).length();
+	l31 = (v3 - v1).length();
+}
 
-T triangle::getV3() const {
-	return this->v3;
-};
+void triangle::rotate(double angle) {
+	T vert1(v1 - getCenter());  // get a vertex coordinate relative to the center
+	T vert2(v2 - getCenter());
+	T vert3(v3 - getCenter());
+
+	vert1.rotate(angle);  // rotate
+	vert2.rotate(angle);
+	vert3.rotate(angle);
+
+	v1 = vert1 + getCenter();  // save new vectors
+	v2 = vert2 + getCenter();
+	v3 = vert3 + getCenter();
+}
+
+void triangle::moveBy(double x, double y) {
+	T movement(x, y);
+
+	setCenter(getCenter() + movement);
+	v1 += movement;
+	v2 += movement;
+	v3 += movement;
+}
+
+void triangle::moveTo(double x, double y) {
+	T vert1(v1 - getCenter());  // get a vertex coordinate relative to the center
+	T vert2(v2 - getCenter());
+	T vert3(v3 - getCenter());
+
+	setCenter(T(x, y));
+	v1 = getCenter() + vert1;
+	v2 = getCenter() + vert2;
+	v3 = getCenter() + vert3;
+}
+
 
 void triangle::print() const {
-	float r, g, b;
-	this->getColor(r, g, b);
-	glColor3f(r, g, b);
-	if (!this->empty) {
-		glBegin(GL_POLYGON);
-		glVertex2f(this->getVector().getX(), this->getVector().getY());
-		glVertex2f(this->v2.getX(), this->v2.getY());
-		glVertex2f(this->v3.getX(), this->v3.getY());
-		glEnd();
-	}
-	else {
-		glLineWidth(this->getWidth());
-		glBegin(GL_LINE_LOOP);
-		glVertex2f(this->getVector().getX(), this->getVector().getY());
-		glVertex2f(this->v2.getX(), this->v2.getY());
-		glVertex2f(this->v3.getX(), this->v3.getY());
-		glEnd();
-	}
-};
-
-void triangle::setEmpty(bool empty) {
-	this->empty = empty;
-};
-
-void triangle::moveUp(float x) {
-	this->setV1(T(this->getV1().getX(), this->getV1().getY() + x));
-	this->setV2(T(this->getV2().getX(), this->getV2().getY() + x));
-	this->setV3(T(this->getV3().getX(), this->getV3().getY() + x));
-};
-void triangle::moveDown(float x) {
-	this->setV1(T(this->getV1().getX(), this->getV1().getY() - x));
-	this->setV2(T(this->getV2().getX(), this->getV2().getY() - x));
-	this->setV3(T(this->getV3().getX(), this->getV3().getY() - x));
-};
-void triangle::moveLeft(float x) {
-	this->setV1(T(this->getV1().getX() - x, this->getV1().getY()));
-	this->setV2(T(this->getV2().getX() - x, this->getV2().getY()));
-	this->setV3(T(this->getV3().getX() - x, this->getV3().getY()));
-};
-void triangle::moveRight(float x) {
-	this->setV1(T(this->getV1().getX() + x, this->getV1().getY()));
-	this->setV2(T(this->getV2().getX() + x, this->getV2().getY()));
-	this->setV3(T(this->getV3().getX() + x, this->getV3().getY()));
-};
+	glColor3f(red, green, blue);
+	glBegin(GL_POLYGON);
+	
+	glVertex2f(v1.x, v1.y);
+	glVertex2f(v2.x, v2.y);
+	glVertex2f(v3.x, v3.y);
+	
+	glEnd();
+}

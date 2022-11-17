@@ -3,7 +3,7 @@
  
 // T = Vector2D
 
-class rectangle:public DrawingObject {
+class rectangle :public DrawingObject {
 protected:
 	double sideSizeX, sideSizeY;
 	T topLeft, topRight, bottomLeft, bottomRight;
@@ -12,7 +12,7 @@ public:
 	rectangle();  // init a square with the center in (0, 0) and 1 length side  
 	rectangle(const T& center, double sideSizeX, double sideSizeY, float red = 1, float green = 1, float blue = 1);
 	rectangle(const rectangle& P);
-	
+
 	void changeSize(double sideSizeX, double sideSizeY);
 	void rotate(double angle) override;
 	void moveBy(double x, double y) override;
@@ -35,31 +35,31 @@ public:
 	void print() const override;
 };
 
-/*
 class triangle:public DrawingObject {
 private:
-	bool empty = false;
-	T v2, v3;
+	T v1, v2, v3;  // vertices of triangle
+protected:
+	double l12, l23, l31;  // lenght of sides
 public:
 	triangle();
-	triangle(const T& v1, const T& v2, const T& v3);
-	triangle(const T& v1, const T& v2, const T& v3, float red, float green, float blue);
-	triangle(const triangle& P);
-	void setV1(const T& v);
-	void setV2(const T& v);
-	void setV3(const T& v);
-	T getV1() const;
-	T getV2() const;
-	T getV3() const;
-	void moveUp(float x);
-	void moveDown(float x);
-	void moveLeft(float x);
-	void moveRight(float x);
-	bool getEmpty() const;
+	triangle(const T& v1, const T& v2, const T& v3, float red = 1, float green = 1, float blue = 1);
+	triangle(const T& center, double size = 1, float red = 1, float green = 1, float blue = 1);  // equilateral triangle, size is a distance between center and vertex
+	triangle(const triangle& Tr);
+
+	void changeSizeAlongAxis(double sizeX, double sizeY);  // 0 if don't want to scale along this axis
+	void rotate(double angle) override;
+	void moveBy(double x, double y) override;
+	void moveTo(double x, double y) override;
 	void print() const;
-	void setEmpty(bool empty); // makes the triangle empty inside
+
+private:
+	double max_minus_min(double a, double b, double c) const {
+		using std::max, std::min;
+		return max(a, max(b, c) ) - min( a, min(b, c) );
+	}
 };
 
+/*
 class circle:public DrawingObject {
 private:
 	bool dotted = false;

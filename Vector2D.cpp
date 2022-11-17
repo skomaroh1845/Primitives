@@ -13,6 +13,10 @@ void Vector2D::rotate(double angle) {  // angle in deg
     y = -_x * sin(angle) + _y * cos(angle);
 } 
 
+double Vector2D::length() const {
+    return sqrt( x*x + y*y );
+}
+
 bool Vector2D::operator==(const Vector2D &v2) const {
     return x == v2.x && y == v2.y;
 }
@@ -31,6 +35,10 @@ Vector2D Vector2D::operator-(const Vector2D &v2) const {
 
 Vector2D Vector2D::operator*(const double a) const {
     return Vector2D(x * a, y * a);
+}
+
+Vector2D Vector2D::operator/(const double a) const {
+    return Vector2D(x / a, y / a);
 }
 
 double Vector2D::operator*(const Vector2D &v2) const {
