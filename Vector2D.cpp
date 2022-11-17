@@ -1,40 +1,20 @@
+#define _USE_MATH_DEFINES
+
 #include <iostream>
 #include <cmath>
 #include "Vector2D.h"
 
 using namespace std;
 
-double Vector2D::getX() const {
-    return x;
-}
-
-double Vector2D::getY() const {
-    return y;
-}
-
-void Vector2D::setX(double _x) {
-    x = _x;
-}
-
-void Vector2D::setY(double _y) {
-    y = _y;
-}
-
-void Vector2D::rotate(double angle) {
-    angle = angle * 3.14 / 180;
-    double _x = getX(), _y = getY();
-    setX(_x * cos(angle) + _y * sin(angle));
-    setY(-_x * sin(angle) + _y * cos(angle));
-}
-
-Vector2D & Vector2D::operator=(const Vector2D &v) {
-    x = v.getX();
-    y = v.getY();
-    return (*this);
-}
+void Vector2D::rotate(double angle) {  // angle in deg 
+    angle = angle * M_PI / 180;  // move to radians
+    double _x = x, _y = y;
+    x = _x * cos(angle) + _y * sin(angle);
+    y = -_x * sin(angle) + _y * cos(angle);
+} 
 
 bool Vector2D::operator==(const Vector2D &v2) const {
-    return getX() == v2.getX() && getY() == v2.getY();
+    return x == v2.x && y == v2.y;
 }
 
 bool Vector2D::operator!=(const Vector2D &v2) const {
@@ -42,19 +22,19 @@ bool Vector2D::operator!=(const Vector2D &v2) const {
 }
 
 Vector2D Vector2D::operator+(const Vector2D &v2) const {
-    return Vector2D(getX() + v2.getX(), getY() + v2.getY());
+    return Vector2D(x + v2.x, y + v2.y);
 }
 
 Vector2D Vector2D::operator-(const Vector2D &v2) const {
-    return Vector2D(getX() - v2.getX(), getY() - v2.getY());
+    return Vector2D(x - v2.x, y - v2.y);
 }
 
 Vector2D Vector2D::operator*(const double a) const {
-    return Vector2D(getX() * a, getY() * a);
+    return Vector2D(x * a, y * a);
 }
 
 double Vector2D::operator*(const Vector2D &v2) const {
-    return getX() * v2.getX() + getY() * v2.getY();
+    return x * v2.x + y * v2.y;
 }
 
 Vector2D operator*(double a, const Vector2D &v) {
@@ -62,14 +42,17 @@ Vector2D operator*(double a, const Vector2D &v) {
 }
 
 ostream &operator<<(ostream &os, const Vector2D &v) {
-    os << '(' << v.getX() << "; " << v.getY() << ')';
+    os << '(' << v.x << "; " << v.y << ')';
     return os;
 }
 
 istream &operator>>(istream &is, Vector2D &v) {
-    double _x, _y;
-    is >> _x >> _y;
-    v.setX(_x);
-    v.setY(_y);
+    is >> v.x >> v.y;
     return is;
+}
+
+Vector2D& Vector2D::operator+=(const Vector2D& v2) {
+    this->x += v2.x;
+    this->y += v2.y;
+    return *this;
 }

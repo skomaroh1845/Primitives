@@ -1,124 +1,113 @@
 #include "Primitives.h"
-#include <glut.h>
 
-rectangle::rectangle() {
-	this->v2.setX(1);
-	this->v3.setX(1);
-	this->v3.setY(1);
-	this->v4.setY(1);
-};
+rectangle::rectangle(): rectangle(T(0,0), 1, 1, 1, 1, 1) {}
 
-rectangle::rectangle(const T& v1, const T& v2, const T& v3, const T& v4) {
-	this->setVector(v1);
-	this->v2 = v2;
-	this->v3 = v3;
-	this->v4 = v4;
-};
+rectangle::rectangle(const rectangle& R): 
+			rectangle(R.getCenter(), R.sideSizeX, R.sideSizeY, R.red, R.green, R.blue) {}
 
-rectangle::rectangle(const T& v1, const T& v2, const T& v3, const T& v4, float red, float green, float blue) {
-	this->setVector(v1);
-	this->v2 = v2;
-	this->v3 = v3;
-	this->v4 = v4;
+rectangle::rectangle(const T& center, double sideSizeX, double sideSizeY, float red, float green, float blue):
+			sideSizeX(sideSizeX), sideSizeY(sideSizeY) 
+{
 	this->setColor(red, green, blue);
-};
+	this->setCenter(center);
 
-bool rectangle::getEmpty() const {
-	return this->empty;
-};
+	this->top = T(center.x, center.y + sideSizeY / 2);
+	this->bottom = T(center.x, center.y - sideSizeY / 2);
+	this->left = T(center.x - sideSizeX / 2, center.y);
+	this->right = T(center.x + sideSizeX / 2, center.y);
 
-void rectangle::setV1(const T& v) {
-	this->setVector(v);
-};
+	this->topLeft = T(center.x - sideSizeX / 2, center.y + sideSizeY / 2);
+	this->topRight = T(center.x + sideSizeX / 2, center.y + sideSizeY / 2);
+	this->bottomLeft = T(center.x - sideSizeX / 2, center.y - sideSizeY / 2);
+	this->bottomRight = T(center.x + sideSizeX / 2, center.y - sideSizeY / 2);
+}
 
-void rectangle::setV2(const T& v) {
-	this->v2 = v;
-};
+void rectangle::moveBy(double x, double y) {
+	T movement(x, y);
+	this->setCenter(getCenter() + movement);
+	
+	this->top += movement;
+	this->bottom += movement;
+	this->left += movement;
+	this->right += movement;
+	
+	this->topLeft += movement;
+	this->topRight += movement;
+	this->bottomLeft += movement;
+	this->bottomRight += movement;
+}
 
-void rectangle::setV3(const T& v) {
-	this->v3 = v;
-};
+void rectangle::moveTo(double x, double y) {
+	this->moveBy(x - getCenter().x, y - getCenter().y);
+}
 
-void rectangle::setV4(const T& v) {
-	this->v4 = v;
-};
+void rectangle::changeSize(double sideSizeX, double sideSizeY) {  // sideSize must be > 0
+	
+	double cX = sideSizeX / this->sideSizeX;  // change factor
+	double cY = sideSizeY / this->sideSizeY;
 
-T rectangle::getV1() const {
-	return this->getVector();
-};
+	this->sideSizeX = sideSizeX;  
+	this->sideSizeY = sideSizeY;
 
-T rectangle::getV2() const {
-	return this->v2;
-};
+	this->top.x *= cX;  // X component
+	this->bottom.x *= cX;
+	this->left.x *= cX;
+	this->right.x *= cX;
+	this->topLeft.x *= cX;
+	this->topRight.x *= cX;
+	this->bottomLeft.x *= cX;
+	this->bottomRight.x *= cX;
+	
+	this->top.y *= cY;  // Y component
+	this->bottom.y *= cY;
+	this->left.y *= cY;
+	this->right.y *= cY;
+	this->topLeft.y *= cY;
+	this->topRight.y *= cY;
+	this->bottomLeft.y *= cY;
+	this->bottomRight.y *= cY;
+}
 
-T rectangle::getV3() const {
-	return this->v3;
-};
+void rectangle::rotate(double angle) {  // in degrees
+	// get side coordinates relative to the center 
+	T relative_top(top - getCenter());
+	T relative_bottom(bottom - getCenter());
+	T relative_left(left - getCenter());
+	T relative_right(right - getCenter());
+	T relative_topLeft(topLeft - getCenter());
+	T relative_topRight(topRight - getCenter());
+	T relative_bottomLeft(bottomLeft - getCenter());
+	T relative_bottomRight(bottomRight - getCenter());
 
-T rectangle::getV4() const {
-	return this->v4;
-};
+	// rotate this vectors
+	relative_top.rotate(angle);
+	relative_bottom.rotate(angle);
+	relative_left.rotate(angle);
+	relative_right.rotate(angle);
+	relative_topLeft.rotate(angle);
+	relative_topRight.rotate(angle);
+	relative_bottomLeft.rotate(angle);
+	relative_bottomRight.rotate(angle);
 
-rectangle::rectangle(const rectangle& R) {
-	float r, g, b;
-	R.getColor(r, g, b);
-	this->setColor(r, g, b);
-	this->empty = R.getEmpty();
-	this->setVector(R.getVector());
-	this->setWidth(R.getWidth());
-	this->v2 = R.getV2();
-	this->v3 = R.getV3();
-	this->v4 = R.getV4();
-};
-
-void rectangle::setEmpty(bool empty) {
-	this->empty = empty;
-};
+	// save new vectors
+	top = relative_top + getCenter();
+	bottom = relative_bottom + getCenter();
+	left = relative_left + getCenter();
+	right = relative_right + getCenter();
+	topLeft = relative_topLeft + getCenter();
+	topRight = relative_topRight + getCenter();
+	bottomLeft = relative_bottomLeft + getCenter();
+	bottomRight = relative_bottomRight + getCenter();
+}
 
 void rectangle::print() const {
-	float r, g, b;
-	this->getColor(r, g, b);
-	glColor3f(r, g, b);
-	if (!this->empty) {
-		glBegin(GL_POLYGON);
-			glVertex2f(this->getVector().getX(), this->getVector().getY());
-			glVertex2f(this->v2.getX(), this->v2.getY());
-			glVertex2f(this->v3.getX(), this->v3.getY());
-			glVertex2f(this->v4.getX(), this->v4.getY());
-		glEnd();
-	}
-	else {
-		glLineWidth(this->getWidth());
-		glBegin(GL_LINE_LOOP);
-			glVertex2f(this->getVector().getX(), this->getVector().getY());
-			glVertex2f(this->v2.getX(), this->v2.getY());
-			glVertex2f(this->v3.getX(), this->v3.getY());
-			glVertex2f(this->v4.getX(), this->v4.getY());
-		glEnd();
-	}	
-};
-
-void rectangle::moveUp(float x) {
-	this->setV1(T(this->getV1().getX(), this->getV1().getY() + x));
-	this->setV2(T(this->getV2().getX(), this->getV2().getY() + x));
-	this->setV3(T(this->getV3().getX(), this->getV3().getY() + x));
-	this->setV4(T(this->getV4().getX(), this->getV4().getY() + x));
-};
-void rectangle::moveDown(float x) {
-	this->setV1(T(this->getV1().getX(), this->getV1().getY() - x));
-	this->setV2(T(this->getV2().getX(), this->getV2().getY() - x));
-	this->setV3(T(this->getV3().getX(), this->getV3().getY() - x));
-	this->setV4(T(this->getV4().getX(), this->getV4().getY() - x));
-};
-void rectangle::moveLeft(float x) {
-	this->setV1(T(this->getV1().getX() - x, this->getV1().getY()));
-	this->setV2(T(this->getV2().getX() - x, this->getV2().getY()));
-	this->setV3(T(this->getV3().getX() - x, this->getV3().getY()));
-	this->setV4(T(this->getV4().getX() - x, this->getV4().getY()));
-};
-void rectangle::moveRight(float x) {
-	this->setV1(T(this->getV1().getX() + x, this->getV1().getY()));
-	this->setV2(T(this->getV2().getX() + x, this->getV2().getY()));
-	this->setV3(T(this->getV3().getX() + x, this->getV3().getY()));
-	this->setV4(T(this->getV4().getX() + x, this->getV4().getY()));
-};
+	glColor3f(red, green, blue);
+	glBegin(GL_POLYGON);
+	
+	glVertex2f(topLeft.x, topLeft.y);
+	glVertex2f(topRight.x, topRight.y);
+	glVertex2f(bottomRight.x, bottomRight.y);
+	glVertex2f(bottomLeft.x, bottomLeft.y);
+	
+	glEnd();
+}
