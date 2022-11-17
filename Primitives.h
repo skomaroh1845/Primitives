@@ -20,7 +20,20 @@ public:
 	void print() const override;
 };
 
+class line :private DrawingObject { // vectors point the begin and the end of line
+protected:
+	T end1, end2; // ends of line
+	float width;
+public:
+	line();
+	line(const T& v1, const T& v2, float width = 1, float red = 1, float green = 1, float blue = 1);
+	line(const line& L);
 
+	void rotate(double angle) override;  // turn around end1
+	void moveBy(double x, double y) override;
+	void moveTo(double x, double y) override;  // move end1 to this coordinates
+	void print() const override;
+};
 
 /*
 class triangle:public DrawingObject {
@@ -45,28 +58,6 @@ public:
 	bool getEmpty() const;
 	void print() const;
 	void setEmpty(bool empty); // makes the triangle empty inside
-};
-
-class line:public DrawingObject { // vectors point the begin and the end of line
-private:
-	T v2;
-	bool dotted = false;
-public:
-	line();
-	line(const T& v1, const T& v2);
-	line(const T& v1, const T& v2, float width, float red, float green, float blue);
-	line(const line& L);
-	void setV1(const T& v);
-	void setV2(const T& v);
-	T getV1() const;
-	T getV2() const;
-	void moveUp(float x);
-	void moveDown(float x);
-	void moveLeft(float x);
-	void moveRight(float x);
-	bool getDotted() const;
-	void print() const;
-	void setDotted(bool dotted); // makes the line dotted
 };
 
 class circle:public DrawingObject {

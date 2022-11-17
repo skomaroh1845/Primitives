@@ -1,7 +1,7 @@
 #include "Primitives.h"
 #include <glut.h>
 
-rectangle P;
+line L;
 
 void display(void)
 {
@@ -9,9 +9,8 @@ void display(void)
     glLoadIdentity(); // —брос просмотра
     glOrtho(-5, 5, -5, 5, -1, 1);  //координатна€ сетка
  
-    P.print();
-    P.rotate(10);
-
+    L.print();
+    L.rotate(10);
 
     glutSwapBuffers();
 }
@@ -39,7 +38,6 @@ void glutStdStart(int argc, char** argv) // you must have display func "display(
 
 int main(int argc, char** argv) {
     glutStdStart(argc, argv);
-    P.moveTo(2, 2);
-    // P.changeSize(2, 2);
+    L.moveBy(0, 2);
     glutMainLoop();
 };
