@@ -1,141 +1,74 @@
+#define _USE_MATH_DEFINES
+
 #include "Primitives.h"
 #include <glut.h>
 #include <cmath>
 
-circle::circle() {};
+circle::circle() : circle(T(0, 0)) {};
 
-circle::circle(const T& v, float R) {
-	this->setVector(v);
-	this->setSize(R);
+circle::circle(const circle& C): 
+			circle(C.getCenter(), C.R, C.red, C.green, C.blue) {
+	this->isFull = C.isFull;
+	this->angle1 = C.angle1;
+	this->angle2 = C.angle2;
 };
 
-circle::circle(const T& v, float R, float red, float green, float blue) {
-	this->setVector(v);
-	this->setSize(R);
+circle::circle(const T& center, float R, float red, float green, float blue): R(R), isFull(true) {
+	this->setCenter(center);
 	this->setColor(red, green, blue);
-};
+}
 
-bool circle::getDotted() const {
-	return this->dotted;
-};
+void circle::rotate(double angle) {
+	if (isFull) return;
+	angle1 += angle;
+	angle2 += angle;
+}
 
-void circle::setDotted(bool dotted) {
-	this->dotted = dotted;
-};
+void circle::moveBy(double x, double y) {
+	setCenter( getCenter() + T(x, y) );
+}
 
-bool circle::getEmpty() const {
-	return this->empty;
-};
+void circle::moveTo(double x, double y) {
+	setCenter(T(x, y));
+}
 
-void circle::setEmpty(bool empty) {
-	this->empty = empty;
-};
+void circle::changeR(double R) {
+	this->R = R;
+}
 
-circle::circle(const circle& C) {
-	this->setVector(C.getVector());
-	this->setSize(C.getSize());
-	float r, g, b;
-	C.getColor(r, g, b);
-	this->setColor(r, g, b);
-	this->setDotted(C.getDotted());
-	this->setWidth(C.getWidth());
-};
-
-const float pi = 3.14159;
+void circle::setSector(double angle1, double angle2) {
+	this->angle1 = angle1;
+	this->angle2 = angle2;
+	isFull = false;
+}
 
 void circle::print() const {
-	float r, g, b;
-	this->getColor(r, g, b);
-	glColor3f(r, g, b);
-	if (this->empty) {
-		glLineWidth(this->getWidth());
-		if (this->dotted) {
-			glEnable(GL_LINE_STIPPLE);
-			glLineStipple(1, 255);
-		};
-		glBegin(GL_LINE_LOOP);
-		for (float a = 0; a < 2 * pi; a += 0.1)
-			glVertex2d(this->getVector().getX() + this->getSize() * cos(a), this->getVector().getY() + this->getSize() * sin(a));
-		glEnd();
-		if (this->dotted) glDisable(GL_LINE_STIPPLE);
-	}
-	else {
+	if (isFull)
+	{
+		glColor3f(red, green, blue);
 		glBegin(GL_TRIANGLE_FAN);
-		for (float a = 0; a < 2 * pi; a += 0.1)
+		for (double a = 0; a < 2 * M_PI; a += 0.3)
 		{
-			glVertex2d(this->getVector().getX() + this->getSize() * cos(a), this->getVector().getY() + this->getSize() * sin(a));
+			glVertex2d(getCenter().x + R * cos(a), getCenter().y + R * sin(a));
 		}
 		glEnd();
 	}
-};
+	else print(angle1, angle2);
+}
 
-void circle::print(float angle) const {
-	angle = angle * pi / 180.0;
-	float r, g, b;
-	this->getColor(r, g, b);
-	glColor3f(r, g, b);
-	if (this->empty) {
-		glLineWidth(this->getWidth());
-		if (this->dotted) {
-			glEnable(GL_LINE_STIPPLE);
-			glLineStipple(1, 255);
-		};
-		glBegin(GL_LINE_STRIP);
-		if (angle >= 0) {
-			for (float a = 0; a < angle - 0.1; a += 0.1)
-				glVertex2d(this->getVector().getX() + this->getSize() * cos(a), this->getVector().getY() + this->getSize() * sin(a));
-			glVertex2d(this->getVector().getX() + this->getSize() * cos(angle), this->getVector().getY() + this->getSize() * sin(angle));
-		}
-		else {
-			for (float a = angle; a < -0.1; a += 0.1)
-				glVertex2d(this->getVector().getX() + this->getSize() * cos(a), this->getVector().getY() + this->getSize() * sin(a));
-			glVertex2d(this->getVector().getX() + this->getSize(), this->getVector().getY());
-		}
-		glEnd();
-		if (this->dotted) glDisable(GL_LINE_STIPPLE);
-	}
-	else {
-		glBegin(GL_TRIANGLE_FAN);
-		glVertex2f(this->getVector().getX(), this->getVector().getY());
-		if (angle >= 0) {
-			for (float a = 0; a < angle - 0.1; a += 0.1)
-				glVertex2d(this->getVector().getX() + this->getSize() * cos(a), this->getVector().getY() + this->getSize() * sin(a));
-			glVertex2d(this->getVector().getX() + this->getSize() * cos(angle), this->getVector().getY() + this->getSize() * sin(angle));
-		}
-		else {
-			for (float a = angle; a < -0.1; a += 0.1)
-				glVertex2d(this->getVector().getX() + this->getSize() * cos(a), this->getVector().getY() + this->getSize() * sin(a));
-			glVertex2d(this->getVector().getX() + this->getSize(), this->getVector().getY());
-		}
-		glEnd();
-	}
-};
-
-void circle::print(float angle1, float angle2) const {
-	angle1 = angle1 * pi / 180.0;
-	angle2 = angle2 * pi / 180.0;
-	float r, g, b;
-	this->getColor(r, g, b);
-	glColor3f(r, g, b);
-	if (this->empty) {
-		glLineWidth(this->getWidth());
-		if (this->dotted) {
-			glEnable(GL_LINE_STIPPLE);
-			glLineStipple(1, 255);
-		};
-		glBegin(GL_LINE_STRIP);
-		for (float a = angle1; a < angle2 - 0.1; a += 0.1)
-			glVertex2d(this->getVector().getX() + this->getSize() * cos(a), this->getVector().getY() + this->getSize() * sin(a));
-		glVertex2d(this->getVector().getX() + this->getSize() * cos(angle2), this->getVector().getY() + this->getSize() * sin(angle2));
-		glEnd();
-		if (this->dotted) glDisable(GL_LINE_STIPPLE);
-	}
-	else {
-		glBegin(GL_TRIANGLE_FAN);
-		glVertex2f(this->getVector().getX(), this->getVector().getY());
-		for (float a = angle1; a < angle2 - 0.1; a += 0.1)
-			glVertex2d(this->getVector().getX() + this->getSize() * cos(a), this->getVector().getY() + this->getSize() * sin(a));
-		glVertex2d(this->getVector().getX() + this->getSize() * cos(angle2), this->getVector().getY() + this->getSize() * sin(angle2));
-		glEnd();
-	}
-};
+void circle::print(double angle, double angle2) const {
+	using std::max, std::min;
+	angle = angle * M_PI / 180.0;
+	angle2 = angle2 * M_PI / 180.0;
+	glColor3f(red, green, blue);
+	glBegin(GL_TRIANGLE_FAN);
+	
+	glVertex2f( getCenter().x, getCenter().y );
+	
+	for (double a = min(angle, angle2); a < max(angle, angle2) - 0.1; a += 0.1)
+		glVertex2d( getCenter().x + R*cos(a), getCenter().y + R*sin(a) );
+	
+	glVertex2d( getCenter().x + R*cos(angle2), getCenter().y + R*sin(angle2) );
+	
+	glEnd();
+}

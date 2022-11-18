@@ -1,16 +1,21 @@
 #include "Primitives.h"
+#include "DrawingObject.h"
 #include <glut.h>
 
-triangle Tr(T(), 0.5, 0, 0.7, 0.1);
+line MassiveObj[26];
+circle C(T(), 0.5, 0.5, 0, 0.5);
 
-void display(void)
+void display()
 {
     glClear(GL_COLOR_BUFFER_BIT); // Очистка экрана
-    glLoadIdentity(); // Сброс просмотра
-    glOrtho(-5, 5, -5, 5, -1, 1);  //координатная сетка
  
-    Tr.print();
-    Tr.rotate(10);
+    C.print();
+    C.rotate(-10);
+    //рисуем координатную сетку
+    for (int i = 0; i < 26; ++i) {
+        MassiveObj[i].print();
+    }
+
     
 
     glutSwapBuffers();
@@ -22,24 +27,60 @@ void timer(int = 0)
     glutTimerFunc(1000, timer, 0);
 }
 
-void glutStdStart(int argc, char** argv) 
+void glutStdStart(int argc, char** argv, int Xmin = -10, int Xmax = 10, int Ymin = -10, int Ymax = 10)
 {  
     glutInit(&argc, argv);  // window init
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowSize(480, 480);
-    glutInitWindowPosition(0, 0);
+    glutInitWindowSize(420, 420);
+    glutInitWindowPosition(200, 200);
     glutCreateWindow("Primitives");
     glClearColor(0.0, 0.0, 0.0, 1.0);
-    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-    glEnable(GL_LINE_SMOOTH);
+    //glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+   // glEnable(GL_LINE_SMOOTH);
     glMatrixMode(GL_PROJECTION);
-}
-
-int main(int argc, char** argv) {
-    glutStdStart(argc, argv);
-    Tr.moveTo(2, -1);
-    Tr.changeSizeAlongAxis(1, 2);
+    glLoadIdentity();
+    glOrtho(Xmin, Xmax, Ymin, Ymax, -1, 1);
     glutDisplayFunc(display);
     timer(0);
     glutMainLoop();
+}
+
+int main(int argc, char** argv) 
+{
+
+    // X axis
+    MassiveObj[0] = line(T(-6, -6), T(6, -6), 1, 0.5, 0.5, 0.5);
+    MassiveObj[1] = line(T(-6, -5), T(6, -5), 1, 0.5, 0.5, 0.5);
+    MassiveObj[2] = line(T(-6, -4), T(6, -4), 1, 0.5, 0.5, 0.5);
+    MassiveObj[3] = line(T(-6, -3), T(6, -3), 1, 0.5, 0.5, 0.5);
+    MassiveObj[4] = line(T(-6, -2), T(6, -2), 1, 0.5, 0.5, 0.5);
+    MassiveObj[5] = line(T(-6, -1), T(6, -1), 1, 0.5, 0.5, 0.5);
+    MassiveObj[6] = line(T(-6, 0), T(6, 0), 1);
+    MassiveObj[7] = line(T(-6, 1), T(6, 1), 1, 0.5, 0.5, 0.5);
+    MassiveObj[8] = line(T(-6, 2), T(6, 2), 1, 0.5, 0.5, 0.5);
+    MassiveObj[9] = line(T(-6, 3), T(6, 3), 1, 0.5, 0.5, 0.5);
+    MassiveObj[10] = line(T(-6, 4), T(6, 4), 1, 0.5, 0.5, 0.5);
+    MassiveObj[11] = line(T(-6, 5), T(6, 5), 1, 0.5, 0.5, 0.5);
+    MassiveObj[12] = line(T(-6, 6), T(6, 6), 1, 0.5, 0.5, 0.5);
+
+    // Y axis
+    MassiveObj[13] = line(T(-6, -6), T(-6, 6), 1, 0.5, 0.5, 0.5);
+    MassiveObj[14] = line(T(-5, -6), T(-5, 6), 1, 0.5, 0.5, 0.5);
+    MassiveObj[15] = line(T(-4, -6), T(-4, 6), 1, 0.5, 0.5, 0.5);
+    MassiveObj[16] = line(T(-3, -6), T(-3, 6), 1, 0.5, 0.5, 0.5);
+    MassiveObj[17] = line(T(-2, -6), T(-2, 6), 1, 0.5, 0.5, 0.5);
+    MassiveObj[18] = line(T(-1, -6), T(-1, 6), 1, 0.5, 0.5, 0.5);
+    MassiveObj[19] = line(T(0, -6), T(0, 6), 1);
+    MassiveObj[20] = line(T(1, -6), T(1, 6), 1, 0.5, 0.5, 0.5);
+    MassiveObj[21] = line(T(2, -6), T(2, 6), 1, 0.5, 0.5, 0.5);
+    MassiveObj[22] = line(T(3, -6), T(3, 6), 1, 0.5, 0.5, 0.5);
+    MassiveObj[23] = line(T(4, -6), T(4, 6), 1, 0.5, 0.5, 0.5);
+    MassiveObj[24] = line(T(5, -6), T(5, 6), 1, 0.5, 0.5, 0.5);
+    MassiveObj[25] = line(T(6, -6), T(6, 6), 1, 0.5, 0.5, 0.5);
+
+    
+    C.setSector(60, 90);
+    C.moveTo(3, -2);
+    C.changeR(3);
+    glutStdStart(argc, argv, -6, 6, -6, 6);
 };

@@ -20,7 +20,7 @@ public:
 	void print() const override;
 };
 
-class line :private DrawingObject { // vectors point the begin and the end of line
+class line :public DrawingObject { // vectors point the begin and the end of line
 protected:
 	T end1, end2; // ends of line
 	float width;
@@ -50,7 +50,7 @@ public:
 	void rotate(double angle) override;
 	void moveBy(double x, double y) override;
 	void moveTo(double x, double y) override;
-	void print() const;
+	void print() const override;
 
 private:
 	double max_minus_min(double a, double b, double c) const {
@@ -59,26 +59,27 @@ private:
 	}
 };
 
-/*
 class circle:public DrawingObject {
 private:
-	bool dotted = false;
-	bool empty = true;
+	bool isFull;
+	double angle1 = 0, angle2 = 0;
+protected:
+	double R;
 public:
-	circle();
-	circle(const T& v, float R); // v points the center of object
-	circle(const T& v, float R, float red, float green, float blue);
+	circle(); 
+	circle(const T& center, float R = 1, float red = 1, float green = 1, float blue = 1);
 	circle(const circle& C);
-	void print() const;
-	void print(float angle) const; // you can choose how many parts of a circle to draw
-								   // the angle is counted from the x axis
-	void print(float angle1, float angle2) const;
-	bool getDotted() const;		 // actual for empty circle
-	void setDotted(bool dotted); // makes the circle dotted
-	bool getEmpty() const;
-	void setEmpty(bool empty); // makes the circle empty inside
+
+	void changeR(double R);
+	void rotate(double angle) override;
+	void moveBy(double x, double y) override;
+	void moveTo(double x, double y) override;
+	void setSector(double angle1, double angle2);
+	void print() const override;
+	void print(double angle, double angle2 = 0) const;
 };
 
+/*
 class leaf:public DrawingObject {
 private:
 	bool empty = false;
