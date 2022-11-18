@@ -19,24 +19,19 @@ public:
 		this->blue = b;
 	}
 
-	virtual void moveBy(double x, double y) {  // changes coordinates by the given value
-		v.x += x;
-		v.y += y;
-	}
+	virtual void moveBy(double x, double y) = 0;
 
-	virtual void moveTo(double x, double y) {
-		v.x = x;
-		v.y = y;
-	}
+	virtual void moveTo(double x, double y) = 0;
 
-	virtual void print() const {}
+	virtual void print() const = 0;
 
-	virtual void rotate(double angle) {}
+	virtual void rotate(double angle) = 0;
 
 	void setCenter(const T& V) {
 		v.x = V.x;
 		v.y = V.y;
 	}
+
 	T getCenter() const {
 		return v;
 	}
