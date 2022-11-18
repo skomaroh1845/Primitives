@@ -3,14 +3,17 @@
 #include <glut.h>
 
 line MassiveObj[26];
-circle C(T(), 0.5, 0.5, 0, 0.5);
+leaf F(T(), 1, 0.1, 0.6, 0);
+
 
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT); // Очистка экрана
  
-    C.print();
-    C.rotate(-10);
+    F.print();
+    //F.rotate(10);
+
+
     //рисуем координатную сетку
     for (int i = 0; i < 26; ++i) {
         MassiveObj[i].print();
@@ -31,7 +34,7 @@ void glutStdStart(int argc, char** argv, int Xmin = -10, int Xmax = 10, int Ymin
 {  
     glutInit(&argc, argv);  // window init
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowSize(420, 420);
+    glutInitWindowSize(630, 630);
     glutInitWindowPosition(200, 200);
     glutCreateWindow("Primitives");
     glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -78,9 +81,7 @@ int main(int argc, char** argv)
     MassiveObj[24] = line(T(5, -6), T(5, 6), 1, 0.5, 0.5, 0.5);
     MassiveObj[25] = line(T(6, -6), T(6, 6), 1, 0.5, 0.5, 0.5);
 
+    F.moveBy(0.5, 0.2);
     
-    C.setSector(60, 90);
-    C.moveTo(3, -2);
-    C.changeR(3);
     glutStdStart(argc, argv, -6, 6, -6, 6);
 };

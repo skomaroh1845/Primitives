@@ -79,16 +79,18 @@ public:
 	void print(double angle, double angle2 = 0) const;
 };
 
-/*
 class leaf:public DrawingObject {
 private:
-	bool empty = false;
+	double angle = 0;
+protected:
+	double size;
 public:
 	leaf();
-	leaf(const T& v, float size);
-	leaf(const T& v, float size, float red, float green, float blue);
+	leaf(const T& v, double size = 1, float red = 1, float green = 1, float blue = 1);
 	leaf(const leaf& F);
-	void print() const;
-	bool getEmpty() const;
-	void setEmpty(bool empty);
-};  */
+
+	void rotate(double angle) override;
+	void moveBy(double x, double y) override;
+	void moveTo(double x, double y) override;
+	void print() const override;
+}; 
