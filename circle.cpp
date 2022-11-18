@@ -1,7 +1,6 @@
 #define _USE_MATH_DEFINES
 
 #include "Primitives.h"
-#include <glut.h>
 #include <cmath>
 
 circle::circle() : circle(T(0, 0)) {};

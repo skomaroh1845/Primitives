@@ -1,74 +1,64 @@
 #include "Primitives.h"
 #include "DrawingObject.h"
+#include "glutStd.h"
 #include <glut.h>
 
-leaf F(T(), 1, 0.1, 0.6, 0);
+
 DrawingObject** ppM;
+DrawingObject** initGrill(double Xmin = -10, double Xmax = 10, double stepX = 1, double Ymin = -10, double Ymax = 10, double stepY = 1);
 
-
-void display()
+void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT); // Очистка экрана
  
-    F.print();
-    //F.rotate(10);
-
-
     //рисуем координатную сетку
-    for (int i = 0; i < 26; ++i) {
-        ppM[i]->print();
-    }
+    for (int i = 0; ppM[i] != nullptr; ++i) ppM[i]->print(); 
 
-    glutSwapBuffers();
+    glutSwapBuffers();  // Bring printed image from buffer to screen
 }
 
-void timer(int = 0)
+void timer(int = 0)  // time ticks
 {
     display();
-    glutTimerFunc(1000, timer, 0);
-}
-
-void glutStdStart(int argc, char** argv, int Xmin = -10, int Xmax = 10, int Ymin = -10, int Ymax = 10)
-{  
-    glutInit(&argc, argv);  // window init
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowSize(630, 630);
-    glutInitWindowPosition(200, 200);
-    glutCreateWindow("Primitives");
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-    //glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-   // glEnable(GL_LINE_SMOOTH);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(Xmin, Xmax, Ymin, Ymax, -1, 1);
-    glutDisplayFunc(display);
-    timer(0);
-    glutMainLoop();
+    glutTimerFunc(1000, timer, 0);  
 }
 
 int main(int argc, char** argv) 
 {
-    line MassiveObj[26];
-    DrawingObject* pM[26];
+    ppM = initGrill();  // return pointer on massive of grill lines 
 
-    // XY axes
-    for (int i = 0; i < 13; ++i) {
-        if (i == 6) {
-            MassiveObj[i] = line(T(-6, i-6), T(6, i-6), 1);
-            MassiveObj[i+13] = line(T(i-6, -6), T(i-6, 6), 1);
-            continue;
-        }
-        MassiveObj[i] = line(T(-6, i-6), T(6, i-6), 1, 0.5, 0.5, 0.5);
-        MassiveObj[i+13] = line(T(i-6, -6), T(i-6, 6), 1, 0.5, 0.5, 0.5);
-    }
-
-    for (int i = 0; i < 26; ++i) {
-        pM[i] = (MassiveObj + i);
-    }
-    ppM = pM;
-
-    F.moveBy(0.5, 0.2);
-
-    glutStdStart(argc, argv, -6, 6, -6, 6);
-
+    glutStdStart(display, timer, argc, argv, 600, 600);
 };
+
+
+DrawingObject** initGrill(double Xmin, double Xmax, double stepX, double Ymin, double Ymax, double stepY) {
+    
+    int nX = (Xmax - Xmin) / stepX + 1;  // number of lines
+    int nY = (Ymax - Ymin) / stepY + 1;
+
+    line* Lines = new line[nX + nY];
+
+    // X axis
+    for (int i = 0; i < nX; ++i) {
+        if (i == trunc(nX / 2)) 
+            Lines[i] = line(T(Xmin, Ymin + i * stepY), T(Xmax, Ymin + i * stepY), 1);
+        else 
+            Lines[i] = line(T(Xmin, Ymin + i * stepY), T(Xmax, Ymin + i * stepY), 1, 0.4, 0.4, 0.4);
+    }
+    // Y axis
+    for (int i = 0; i < nY; ++i) {
+        if (i == trunc(nY / 2)) 
+            Lines[nX + i] = line(T(Xmin + i * stepX, Ymin), T(Xmin + i * stepX, Ymax), 1);
+        else 
+            Lines[nX + i] = line(T(Xmin + i * stepX, Ymin), T(Xmin + i * stepX, Ymax), 1, 0.4, 0.4, 0.4);
+    }
+
+    DrawingObject** pLines = new DrawingObject*[nX + nY + 1];
+
+    for (int i = 0; i < nX + nY; ++i) {
+        pLines[i] = (Lines + i);
+    }
+    pLines[nX + nY] = nullptr;
+
+    return pLines;
+}

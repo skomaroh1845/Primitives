@@ -1,6 +1,8 @@
+#pragma once
+
 #include "DrawingObject.h"
 #include <glut.h>
- 
+
 // T = Vector2D
 
 class rectangle :public DrawingObject {

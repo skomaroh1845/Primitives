@@ -1,5 +1,4 @@
-#ifndef LINAL_VECTOR2D_H
-#define LINAL_VECTOR2D_H
+#pragma once
 
 #include <iostream>
 
@@ -39,6 +38,3 @@ Vector2D operator*(double a, const Vector2D &v);
 std::ostream &operator<<(std::ostream &os, const Vector2D &v);
 
 std::istream &operator>>(std::istream &is, Vector2D &v);
-
-
-#endif //LINAL_VECTOR2D_H

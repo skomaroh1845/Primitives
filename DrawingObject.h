@@ -1,5 +1,4 @@
-#ifndef Primitiv_DrawingObject
-#define Primitiv_DrawingObject
+#pragma once
 
 #include "Vector2D.h"
 
@@ -36,4 +35,3 @@ public:
 		return v;
 	}
 };
-#endif // !Primitiv_DrawingObject
