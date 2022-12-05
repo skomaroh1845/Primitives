@@ -9,7 +9,7 @@ leaf::leaf() : leaf(T(0, 0)) {}
 leaf::leaf(const leaf& F): 
 			leaf(F.getCenter(), F.size, F.red, F.green, F.blue) {}
 
-leaf::leaf(const T& v, double size, float red, float green, float blue): size(size) {
+leaf::leaf(const T& v, double size, float red, float green, float blue): size(size), angle(0) {
 	this->setColor(red, green, blue);
 	this->setCenter(v);
 };

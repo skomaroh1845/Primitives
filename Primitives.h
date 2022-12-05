@@ -1,16 +1,15 @@
 #pragma once
 
 #include "DrawingObject.h"
-#include <glut.h>
 
 // T = Vector2D
 
 class rectangle :public DrawingObject {
-protected:
+public:
 	double sideSizeX, sideSizeY;
 	T topLeft, topRight, bottomLeft, bottomRight;
 	T top, left, right, bottom;
-public:
+
 	rectangle();  // init a square with the center in (0, 0) and 1 length side  
 	rectangle(const T& center, double sideSizeX, double sideSizeY, float red = 1, float green = 1, float blue = 1);
 	rectangle(const rectangle& P);
@@ -44,7 +43,7 @@ protected:
 	double l12, l23, l31;  // lenght of sides
 public:
 	triangle();
-	triangle(const T& v1, const T& v2, const T& v3, float red = 1, float green = 1, float blue = 1);
+    triangle(const T& v1, const T& v2, const T& v3, float red = 1, float green = 1, float blue = 1);
 	triangle(const T& center, double size = 1, float red = 1, float green = 1, float blue = 1);  // equilateral triangle, size is a distance between center and vertex
 	triangle(const triangle& Tr);
 
@@ -56,7 +55,8 @@ public:
 
 private:
 	double max_minus_min(double a, double b, double c) const {
-		using std::max, std::min;
+		using std::max;
+		using std::min;
 		return max(a, max(b, c) ) - min( a, min(b, c) );
 	}
 };
@@ -64,15 +64,14 @@ private:
 class circle:public DrawingObject {
 private:
 	bool isFull;
-	double angle1 = 0, angle2 = 0;
-protected:
-	double R;
+	double angle1, angle2;
+
 public:
+	double R;
 	circle(); 
 	circle(const T& center, float R = 1, float red = 1, float green = 1, float blue = 1);
 	circle(const circle& C);
 
-	void changeR(double R);
 	void rotate(double angle) override;
 	void moveBy(double x, double y) override;
 	void moveTo(double x, double y) override;
@@ -83,7 +82,7 @@ public:
 
 class leaf:public DrawingObject {
 private:
-	double angle = 0;
+	double angle;
 protected:
 	double size;
 public:

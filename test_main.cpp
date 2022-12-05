@@ -1,6 +1,6 @@
 #include "Primitives.h"
 #include "DrawingObject.h"
-#include "glutStd.h"
+#include "glutStd.cpp"
 #include <glut.h>
 
 

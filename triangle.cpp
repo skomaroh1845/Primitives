@@ -1,4 +1,5 @@
 #include "Primitives.h"
+#include <glut.h>
 
 triangle::triangle() : triangle(T(0,0)) {}
 

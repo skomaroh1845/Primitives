@@ -1,4 +1,5 @@
 #include "Primitives.h"
+#include <glut.h>
 
 rectangle::rectangle(): rectangle(T(0,0), 1, 1, 1, 1, 1) {}
 

@@ -6,11 +6,11 @@ class Vector2D final {
 public:
     double x, y;
 
-    Vector2D() : x(0), y(0) {}
+    Vector2D();
 
-    Vector2D(double _x, double _y) : x(_x), y(_y) {}
+    Vector2D(double _x, double _y);
 
-    Vector2D(const Vector2D& v2) : Vector2D(v2.x, v2.y) {}
+    Vector2D(const Vector2D& v2);
 
     void rotate(double angle); //Поворачивает веткор на угол angle, заданный в градусах
 

@@ -1,4 +1,5 @@
 #include "Primitives.h"
+#include <glut.h>
 
 line::line() : line(T(0, 0), T(1, 0)) {}  // unit lenght line along x axis 
 

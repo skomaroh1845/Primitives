@@ -6,6 +6,12 @@
 
 using namespace std;
 
+Vector2D::Vector2D() : x(0), y(0) {}
+
+Vector2D::Vector2D(double _x, double _y) : x(_x), y(_y) {}
+
+Vector2D::Vector2D(const Vector2D& v2) : Vector2D(v2.x, v2.y) {}
+
 void Vector2D::rotate(double angle) {  // angle in deg 
     angle = angle * M_PI / 180;  // move to radians
     double _x = x, _y = y;

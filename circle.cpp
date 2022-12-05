@@ -2,6 +2,7 @@
 
 #include "Primitives.h"
 #include <cmath>
+#include <glut.h>
 
 circle::circle() : circle(T(0, 0)) {};
 
@@ -12,7 +13,9 @@ circle::circle(const circle& C):
 	this->angle2 = C.angle2;
 };
 
-circle::circle(const T& center, float R, float red, float green, float blue): R(R), isFull(true) {
+circle::circle(const T& center, float R, float red, float green, float blue): 
+			R(R), isFull(true), angle1(0), angle2(0) 
+{
 	this->setCenter(center);
 	this->setColor(red, green, blue);
 }
@@ -31,10 +34,6 @@ void circle::moveTo(double x, double y) {
 	setCenter(T(x, y));
 }
 
-void circle::changeR(double R) {
-	this->R = R;
-}
-
 void circle::setSector(double angle1, double angle2) {
 	this->angle1 = angle1;
 	this->angle2 = angle2;
@@ -46,7 +45,7 @@ void circle::print() const {
 	{
 		glColor3f(red, green, blue);
 		glBegin(GL_TRIANGLE_FAN);
-		for (double a = 0; a < 2 * M_PI; a += 0.3)
+		for (double a = 0; a < 2 * M_PI; a += 0.4)
 		{
 			glVertex2d(getCenter().x + R * cos(a), getCenter().y + R * sin(a));
 		}
@@ -56,7 +55,8 @@ void circle::print() const {
 }
 
 void circle::print(double angle, double angle2) const {
-	using std::max, std::min;
+	using std::max;
+	using std::min;
 	angle = angle * M_PI / 180.0;
 	angle2 = angle2 * M_PI / 180.0;
 	glColor3f(red, green, blue);
